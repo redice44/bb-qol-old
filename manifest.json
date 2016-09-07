@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+  "name": "Blackboard Quality of Life",
+  "description": "This extension adds many missing Quality of Life features for Section Designers.",
+  "version": "0.0.1",
+  "permissions": [
+    "contextMenus"
+  ],
+
+  "author": "Matt Thomson <red.cataclysm@gmail.com>",
+
+  "background": {
+    "persistent": false,
+    "scripts": [
+      "contextMenu.js"
+    ]
+  }
+}

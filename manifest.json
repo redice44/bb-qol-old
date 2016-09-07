@@ -14,5 +14,12 @@
     "scripts": [
       "contextMenu.js"
     ]
-  }
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["https://fiu.blackboard.com/*"],
+      "js": ["contentScript.js"]
+    }
+  ]
 }

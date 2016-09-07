@@ -21,6 +21,15 @@ function onClickHandler(info, tab) {
   console.log(tab);
 }
 
+function onMessageHandler(request, sender, sendResponse) {
+  console.log(sender.tab ?
+                "from a content script:" + sender.tab.url :
+                "from the extension");
+    if (request.greeting == "Hello!")
+      sendResponse({farewell: "goodbye"});
+}
+
 /* Attach Listeners */
 chrome.runtime.onInstalled.addListener(onInstalledHandler);
+chrome.runtime.onMessage.addListener(onMessageHandler);
 chrome.contextMenus.onClicked.addListener(onClickHandler);

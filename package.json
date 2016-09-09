@@ -6,6 +6,7 @@
     "build": "npm run build:eventPage && npm run build:pageTree && npm run copy:statics",
     "clean": "rm -rf build/ && mkdir build",
     "watch:eventPage": "watchify -o build/eventPages.js -t [ babelify --presets [ es2015 ] ] -v -d src/eventPages/index.js",
+    "watch:pageTree": "watchify -o build/buildPageTree.js -t [ babelify --presets [ es2015 ] ] -v -d src/contentScripts/buildPageTree.js",
     "build:eventPage": "browserify src/eventPages/index.js -t [ babelify --presets [ es2015 ] ] -o build/eventPages.js",
     "build:pageTree": "browserify src/contentScripts/buildPageTree.js -t [ babelify --presets [ es2015 ] ] -o build/buildPageTree.js",
     "copy:statics": "cp manifest.json build/manifest.json"

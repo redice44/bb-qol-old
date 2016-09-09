@@ -1,4 +1,5 @@
-import { url } from '../util/contentTypes';
+import { ACTIONS } from '../util/constants';
+import { menu } from '../util/menu';
 
 /* onInstalled Handler */
 function onInstalledHandler() {
@@ -7,24 +8,22 @@ function onInstalledHandler() {
 }
 
 function buildContextMenus() {
-  var props = {
-    id: 'heading',
-    title: 'Look ma!',
-    contexts: ['page'],
-    documentUrlPatterns: ['https://fiu.blackboard.com/*'],
-  };
-  console.log(url);
-
-  chrome.contextMenus.create(props);
+  chrome.contextMenus.create(menu.parseTree);
 }
 
 /* onClicked Handler */
 function onClickHandler(info, tab) {
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, {greeting: "Hello!"}, function(response) {
-      console.log(response.farewell);
-    });
+    var payload = {
+      type: ACTIONS.parseTree
+    };
+
+    chrome.tabs.sendMessage(tabs[0].id, payload, handleTree);
   });
+}
+
+function handleTree(tree) {
+  console.log(tree);
 }
 
 function onMessageHandler(request, sender, sendResponse) {

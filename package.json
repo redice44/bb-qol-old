@@ -1,0 +1,23 @@
+{
+  "name": "bb-qol",
+  "version": "0.0.1",
+  "description": "Chrome Extension that adds Quality of Life features to Blackboard",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redice44/bb-qol.git"
+  },
+  "author": "Matt Thomson <red.cataclysm@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/redice44/bb-qol/issues"
+  },
+  "homepage": "https://github.com/redice44/bb-qol#readme",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.14.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2"
+  }
+}

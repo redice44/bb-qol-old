@@ -1,3 +1,5 @@
+import { url } from '../util/contentTypes';
+
 /* onInstalled Handler */
 function onInstalledHandler() {
   console.log('Initializing...');
@@ -11,6 +13,7 @@ function buildContextMenus() {
     contexts: ['page'],
     documentUrlPatterns: ['https://fiu.blackboard.com/*'],
   };
+  console.log(url);
 
   chrome.contextMenus.create(props);
 }

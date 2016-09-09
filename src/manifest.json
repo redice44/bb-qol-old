@@ -12,14 +12,14 @@
   "background": {
     "persistent": false,
     "scripts": [
-      "contextMenu.js"
+      "eventPages/contextMenu.js"
     ]
   },
 
   "content_scripts": [
     {
       "matches": ["https://fiu.blackboard.com/*"],
-      "js": ["contentScript.js"]
+      "js": ["contentScripts/buildPageTree.js"]
     }
   ]
 }

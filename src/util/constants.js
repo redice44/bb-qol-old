@@ -1,6 +1,6 @@
 export const URL = {
-  base: 'https://fiu.blackboard.com/',
-  contentPage: 'webapps/blackboard/content/listContentEditable.jsp?'
+  base: 'https://fiu.blackboard.com',
+  contentPage: '/webapps/blackboard/content/listContentEditable.jsp'
 };
 
 export const ACTIONS = {
@@ -9,4 +9,17 @@ export const ACTIONS = {
 
 export const MENU_ID = {
   parseTree: 'PARSE_TREE'
+};
+
+export const CONTENT = {
+  item: {
+    name: 'Item'
+  },
+  folder: {
+    name: 'Content Folder',
+    endPoint: URL.contentPage
+  },
+  weblink: {
+    name: 'External Weblink'
+  }
 };

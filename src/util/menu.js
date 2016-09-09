@@ -5,6 +5,6 @@ export const menu = {
     id: MENU_ID.parseTree,
     title: 'Parse Page',
     contexts: ['page'],
-    documentUrlPatterns: [`${URL.base}${URL.contentPage}*`]
+    documentUrlPatterns: [`${URL.base}${URL.contentEndPoint}*`]
   }
 };

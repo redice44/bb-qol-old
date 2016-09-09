@@ -5,8 +5,6 @@ function parsePage() {
 
   let contentItems = document.querySelectorAll('#content_listContainer > li');
   let page = [];
-  console.log(contentItems);
-  contentItems.forEach(parseItem);
 
   // Have to traverse over the array in this way, because contentItems doesn't
   // have Array.map
@@ -28,14 +26,38 @@ function parseItem(item) {
       // Internal Blackboard links
       const params = link.search.substr(1).split('&');
 
-      console.log(link.pathname);
       switch (link.pathname) {
         case CONTENT.folder.endPoint:
           type = CONTENT.folder.name;
           break;
+        case CONTENT.assignment.endPoint:
+          type = CONTENT.assignment.name;
+          break;
+        case CONTENT.module.endPoint:
+          type = CONTENT.module.name;
+          break;
+        case CONTENT.blankPage.endPoint:
+          type = CONTENT.blankPage.name;
+          break;
+        case CONTENT.lessonPlan.endPoint:
+          type = CONTENT.lessonPlan.name;
+          break;
+        case CONTENT.courseLink.endPoint:
+          type = CONTENT.courseLink.name;
+          break;
+        case CONTENT.assessment.endPoint:
+          type = CONTENT.assessment.name;
+          break;
         default:
-          type = 'Unknown';
-          console.log('Unknown item type.', link.href);
+          if (link.pathname.includes(CONTENT.file.endPoint)) {
+            // File pathnames are dynamic. Filter on true endpoint
+            type = CONTENT.file.name;
+          } else {
+            type = 'Unknown';
+            console.log('Unknown item type.', link,
+            'Please open an issue with the link above here:',
+            'https://github.com/redice44/bb-qol/issues');
+          }
       }
     } else {
       // Weblinks

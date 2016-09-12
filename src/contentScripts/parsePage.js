@@ -23,9 +23,9 @@ function parsePage() {
     }
   }
 
-  page.title = document.querySelector('#pageTitleText').innerText;
+  page.title = document.querySelector(BB_SELECTOR.rootItemTitle).innerText;
   page.type = CONTENT.folder.name;
-  page.courseTitle = document.querySelector('#courseMenuPalette_paletteTitleHeading > div > h3:first-child > a').innerText;
+  page.courseTitle = document.querySelector(BB_SELECTOR.courseTitle).innerText;
 
   // Have to traverse over the array in this way, because contentItems doesn't
   // have Array.map

@@ -24,7 +24,9 @@ export const BB_SELECTOR = {
   content: '#content_listContainer',
   contentArray: '#content_listContainer > li',
   itemTitle: '.item > h3',
-  itemLink: '.item > h3 > a'
+  itemLink: '.item > h3 > a',
+  courseTitle: '#courseMenuPalette_paletteTitleHeading > div > h3:first-child > a',
+  rootItemTitle: '#pageTitleText'
 };
 
 export const CONTENT = {

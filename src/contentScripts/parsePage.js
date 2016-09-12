@@ -1,6 +1,7 @@
 require('../stylesheets/overlay.scss');
 
 import { ACTIONS, BB_SELECTOR, CONTENT, URL } from '../util/constants';
+import { buildModal } from './buildModal';
 
 function parsePage() {
   console.log('Parsing Page');
@@ -112,21 +113,9 @@ function showOverview() {
     }
   }
 
-  chrome.storage.local.get(id, buildOverlay);
-}
-
-function buildOverlay(items) {
-  console.log(items);
-  let overlay = document.createElement('div');
-  overlay.id = 'BB-QoL-overlay';
-  overlay.addEventListener('click', closeOverlay, false);
-  document.body.appendChild(overlay);
-}
-
-function closeOverlay() {
-  let overlay = document.querySelector('#BB-QoL-overlay');
-  overlay.removeEventListener('click', closeOverlay, false);
-  overlay.parentNode.removeChild(overlay);
+  chrome.storage.local.get(id, (items) => {
+    buildModal(items[id]);
+  });
 }
 
 function onMessageHandler(payload, sender, sendResponse) {

@@ -1,0 +1,7 @@
+.BB-QoL-overlay {
+  background: red;
+  z-index: 10000;
+  & > span {
+    background: yellow;
+  }
+}

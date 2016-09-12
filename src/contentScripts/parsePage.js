@@ -1,3 +1,5 @@
+require('../stylesheets/overlay.scss');
+
 import { ACTIONS, BB_SELECTOR, CONTENT, URL } from '../util/constants';
 
 function parsePage() {
@@ -116,7 +118,7 @@ function showOverview() {
 function buildOverlay(items) {
   console.log(items);
   let overlay = document.createElement('div');
-  overlay.className = 'BB_QoL-overlay';
+  overlay.className = 'BB-QoL-overlay';
   document.body.appendChild(overlay);
 }
 

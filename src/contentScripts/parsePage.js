@@ -95,12 +95,41 @@ function parseItem(item) {
   return child;
 }
 
+function showOverview() {
+  let id = '';
+  let params = document.URL.split('?')[1].split('&');
+  for (let p of params) {
+    let pair = p.split('=');
+
+    switch (pair[0]) {
+      case 'course_id':
+        id = pair[1];
+        break;
+      default:
+        // do nothing
+    }
+  }
+
+  chrome.storage.local.get(id, buildOverlay);
+}
+
+function buildOverlay(items) {
+  console.log(items);
+  let overlay = document.createElement('div');
+  overlay.className = 'BB_QoL-overlay';
+  document.body.appendChild(overlay);
+}
+
 function onMessageHandler(payload, sender, sendResponse) {
   if (!sender.tab) {
     switch (payload.type) {
       case ACTIONS.parseTree:
         console.log('Requested to build the page tree.');
         sendResponse(parsePage());
+        break;
+      case ACTIONS.viewCourse:
+        console.log('Requested to view course overview.');
+        showOverview();
         break;
       default:
         console.log('Unknown action');

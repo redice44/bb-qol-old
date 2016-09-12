@@ -1,6 +1,12 @@
 import { MENU_ID, URL } from './constants';
 
 export const menu = {
+  viewCourse: {
+    id: MENU_ID.viewCourse,
+    title: 'View Course Overview',
+    contexts: ['page'],
+    documentUrlPatterns: [`${URL.base}${URL.contentEndPoint}*`]
+  },
   parsePage: {
     id: MENU_ID.parsePage,
     title: 'Parse Page',

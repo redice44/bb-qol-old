@@ -8,6 +8,7 @@ function onInstalledHandler() {
 }
 
 function buildContextMenus() {
+  chrome.contextMenus.create(menu.viewCourse);
   chrome.contextMenus.create(menu.parsePage);
   chrome.contextMenus.create(menu.clearStorage);
   chrome.contextMenus.create(menu.viewStorage);
@@ -16,6 +17,9 @@ function buildContextMenus() {
 /* onClicked Handler */
 function onClickHandler(info, tab) {
   switch (info.menuItemId) {
+    case MENU_ID.viewCourse:
+      viewCourseSelection();
+      break;
     case MENU_ID.parsePage:
       parsePageSelection();
       break;
@@ -31,13 +35,21 @@ function onClickHandler(info, tab) {
   }
 }
 
+function viewCourseSelection() {
+  sendAction(ACTIONS.viewCourse, () => {});
+}
+
 function parsePageSelection() {
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+  sendAction(ACTIONS.parseTree, storePage);
+}
+
+function sendAction(action, cb) {
+  chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
     var payload = {
-      type: ACTIONS.parseTree
+      type: action
     };
 
-    chrome.tabs.sendMessage(tabs[0].id, payload, storePage);
+    chrome.tabs.sendMessage(tabs[0].id, payload, cb);
   });
 }
 

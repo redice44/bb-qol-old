@@ -11,10 +11,13 @@ export const URL = {
 };
 
 export const ACTIONS = {
+  getCourseId: 'ACTION_GET_COURSE_ID',
+  viewCourse: 'ACTION_VIEW_COURSE_OVERVIEW',
   parseTree: 'ACTION_PARSE_PAGE_TREE'
 };
 
 export const MENU_ID = {
+  viewCourse: 'VIEW_COURSE_OVERVIEW',
   parsePage: 'PARSE_PAGE',
   clearStorage: 'CLEAR_LOCAL_STORAGE',
   viewStorage: 'VIEW_LOCAL_STORAGE'

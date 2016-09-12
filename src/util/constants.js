@@ -15,7 +15,16 @@ export const ACTIONS = {
 };
 
 export const MENU_ID = {
-  parseTree: 'PARSE_TREE'
+  parsePage: 'PARSE_PAGE',
+  clearStorage: 'CLEAR_LOCAL_STORAGE',
+  viewStorage: 'VIEW_LOCAL_STORAGE'
+};
+
+export const BB_SELECTOR = {
+  content: '#content_listContainer',
+  contentArray: '#content_listContainer > li',
+  itemTitle: '.item > h3',
+  itemLink: '.item > h3 > a'
 };
 
 export const CONTENT = {

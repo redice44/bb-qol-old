@@ -1,15 +1,36 @@
-import { ACTIONS, CONTENT, URL } from '../util/constants';
+import { ACTIONS, BB_SELECTOR, CONTENT, URL } from '../util/constants';
 
 function parsePage() {
-  console.log('Building Tree');
+  console.log('Parsing Page');
 
-  let contentItems = document.querySelectorAll('#content_listContainer > li');
-  let page = [];
+  let contentItems = document.querySelectorAll(BB_SELECTOR.contentArray);
+  let page = {};
+  let params = document.URL.split('?')[1].split('&');
+  page.children = [];
+
+  for (let p of params) {
+    let pair = p.split('=');
+
+    switch (pair[0]) {
+      case 'content_id':
+        page.id = pair[1];
+        break;
+      case 'course_id':
+        page.courseId = pair[1];
+        break;
+      default:
+        // do nothing
+    }
+  }
+
+  page.title = document.querySelector('#pageTitleText').innerText;
+  page.type = CONTENT.folder.name;
+  page.courseTitle = document.querySelector('#courseMenuPalette_paletteTitleHeading > div > h3:first-child > a').innerText;
 
   // Have to traverse over the array in this way, because contentItems doesn't
   // have Array.map
   for (let item of contentItems) {
-    page.push(parseItem(item));
+    page.children.push(parseItem(item));
   }
 
   console.log(page);
@@ -17,10 +38,12 @@ function parsePage() {
 }
 
 function parseItem(item) {
-  const id = item.id.split(':')[1];
-  const title = item.querySelector('.item > h3').innerText;
-  let type = CONTENT.item.name;
-  let link = item.querySelector('.item > h3 > a');
+  let child = {};
+  child.id = item.id.split(':')[1];
+  child.title = item.querySelector(BB_SELECTOR.itemTitle).innerText;
+
+  let link = item.querySelector(BB_SELECTOR.itemLink);
+
   if (link) {
     if (link.origin === URL.base) {
       // Internal Blackboard links
@@ -28,32 +51,32 @@ function parseItem(item) {
 
       switch (link.pathname) {
         case CONTENT.folder.endPoint:
-          type = CONTENT.folder.name;
+          child.type = CONTENT.folder.name;
           break;
         case CONTENT.assignment.endPoint:
-          type = CONTENT.assignment.name;
+          child.type = CONTENT.assignment.name;
           break;
         case CONTENT.module.endPoint:
-          type = CONTENT.module.name;
+          child.type = CONTENT.module.name;
           break;
         case CONTENT.blankPage.endPoint:
-          type = CONTENT.blankPage.name;
+          child.type = CONTENT.blankPage.name;
           break;
         case CONTENT.lessonPlan.endPoint:
-          type = CONTENT.lessonPlan.name;
+          child.type = CONTENT.lessonPlan.name;
           break;
         case CONTENT.courseLink.endPoint:
-          type = CONTENT.courseLink.name;
+          child.type = CONTENT.courseLink.name;
           break;
         case CONTENT.assessment.endPoint:
-          type = CONTENT.assessment.name;
+          child.type = CONTENT.assessment.name;
           break;
         default:
           if (link.pathname.includes(CONTENT.file.endPoint)) {
             // File pathnames are dynamic. Filter on true endpoint
-            type = CONTENT.file.name;
+            child.type = CONTENT.file.name;
           } else {
-            type = 'Unknown';
+            child.type = 'Unknown';
             console.log('Unknown item type.', link,
             'Please open an issue with the link above here:',
             'https://github.com/redice44/bb-qol/issues');
@@ -61,15 +84,15 @@ function parseItem(item) {
       }
     } else {
       // Weblinks
-      type = CONTENT.weblink.name;
+      child.type = CONTENT.weblink.name;
     }
+  } else {
+    // Item
+    child.type = CONTENT.item.name;
   }
 
-  return {
-    id: id,
-    title: title,
-    type: type
-  };
+  console.log(child);
+  return child;
 }
 
 function onMessageHandler(payload, sender, sendResponse) {

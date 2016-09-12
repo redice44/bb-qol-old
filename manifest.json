@@ -4,7 +4,8 @@
   "description": "This extension adds many missing Quality of Life features for Section Designers.",
   "version": "0.0.1",
   "permissions": [
-    "contextMenus"
+    "contextMenus",
+    "storage"
   ],
 
   "author": "Matt Thomson <red.cataclysm@gmail.com>",
@@ -18,7 +19,7 @@
 
   "content_scripts": [
     {
-      "matches": ["https://fiu.blackboard.com/*"],
+      "matches": ["https://fiu.blackboard.com/webapps/blackboard/content/listContentEditable.jsp?*"],
       "js": ["parsePage.js"]
     }
   ]

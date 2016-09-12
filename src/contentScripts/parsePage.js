@@ -118,8 +118,15 @@ function showOverview() {
 function buildOverlay(items) {
   console.log(items);
   let overlay = document.createElement('div');
-  overlay.className = 'BB-QoL-overlay';
+  overlay.id = 'BB-QoL-overlay';
+  overlay.addEventListener('click', closeOverlay, false);
   document.body.appendChild(overlay);
+}
+
+function closeOverlay() {
+  let overlay = document.querySelector('#BB-QoL-overlay');
+  overlay.removeEventListener('click', closeOverlay, false);
+  overlay.parentNode.removeChild(overlay);
 }
 
 function onMessageHandler(payload, sender, sendResponse) {

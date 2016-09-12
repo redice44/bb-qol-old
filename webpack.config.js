@@ -5,8 +5,8 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var config = {
   entry: {
-    eventPage: './src/eventPages/index',
-    contentScript: './src/contentScripts/parsePage'
+    eventPages: './src/eventPages/index',
+    contentScripts: './src/contentScripts/parsePage'
   },
   output: {
     path: path.join(__dirname, 'build'),

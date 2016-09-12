@@ -1,7 +1,11 @@
-.BB-QoL-overlay {
-  background: red;
-  z-index: 10000;
-  & > span {
-    background: yellow;
-  }
+#BB-QoL-overlay {
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 1200;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+
+  position: fixed;
+  top: 0;
+  left: 0;
 }

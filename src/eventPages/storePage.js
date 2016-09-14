@@ -1,6 +1,8 @@
-export function storePage(tree) {
-  const query = tree.courseId;
-  chrome.storage.local.get(query, function(items) {
+export function storePage(courseItem) {
+  //const query = tree.courseId;
+  // TODO: Verify this can query into an object. eg {id: tree.courseId}
+  chrome.storage.local.get(null, function(items) {
+    /*
     if (items.hasOwnProperty(tree.courseId)) {
       console.log('Updating course.');
       updateCourse(items, tree);
@@ -8,8 +10,43 @@ export function storePage(tree) {
       console.log('Creating new course.');
       addCourse(tree);
     }
+    */
+    if (items) {
+      // Course exists
+    } else {
+      createCourse(courseItem);
+    }
   });
 }
+
+function createCourse(courseItem) {
+  let course = {};
+  course.id = courseItem.courseId;
+  course.title = courseItem.courseTitle;
+  course.menu = courseItem.courseMenu;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* OLD */
 
 function addCourse(c) {
   let course = {};

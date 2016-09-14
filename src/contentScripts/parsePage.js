@@ -3,49 +3,98 @@ require('../stylesheets/overlay.scss');
 import { ACTIONS, BB_SELECTOR, CONTENT, URL } from '../util/constants';
 import { buildModal } from './buildModal';
 
-function parsePage() {
-  console.log('Parsing Page');
-
-  let contentItems = document.querySelectorAll(BB_SELECTOR.contentArray);
+// Parses the current page in the course.
+function parseCoursePage() {
   let page = {};
-  let params = document.URL.split('?')[1].split('&');
-  page.children = [];
-
-  for (let p of params) {
-    let pair = p.split('=');
-
-    switch (pair[0]) {
-      case 'content_id':
-        page.id = pair[1];
-        break;
-      case 'course_id':
-        page.courseId = pair[1];
-        break;
-      default:
-        // do nothing
-    }
-  }
-
-  page.title = document.querySelector(BB_SELECTOR.rootItemTitle).innerText;
-  page.type = CONTENT.folder.name;
-  page.courseTitle = document.querySelector(BB_SELECTOR.courseTitle).innerText;
-
-  // Have to traverse over the array in this way, because contentItems doesn't
-  // have Array.map
-  for (let item of contentItems) {
-    page.children.push(parseItem(item));
-  }
-
+  page.course = getCourseInfo();
+  page.content = getCourseContent();
   console.log(page);
+
   return page;
 }
 
+function getCourseContent() {
+  let content = {};
+  // jscs: disable requireCamelCaseOrUpperCaseIdentifiers
+  content.id = getUrlParams(document.URL).content_id;
+  // jscs: enable requireCamelCaseOrUpperCaseIdentifiers
+  content.title = document
+    .querySelector(BB_SELECTOR.contentPageTitle).innerText;
+  content.children = getContentItems(
+    document.querySelectorAll(BB_SELECTOR.contentArray)
+  );
+
+  return content;
+}
+
+function getContentItems(contentItems) {
+  let content = [];
+  // Have to traverse over the array in this way, because contentItems doesn't
+  // have Array.map
+  for (let item of contentItems) {
+    content.push(parseItem(item));
+  }
+
+  return content;
+}
+
+// TODO: Store content of the item depending on type.
 function parseItem(item) {
   let child = {};
+
+  child = Object.assign({},
+    analyzeLinkType(item.querySelector(BB_SELECTOR.itemLink)));
   child.id = item.id.split(':')[1];
   child.title = item.querySelector(BB_SELECTOR.itemTitle).innerText;
 
-  let link = item.querySelector(BB_SELECTOR.itemLink);
+  return child;
+}
+
+function getCourseInfo() {
+  let course = {};
+  // jscs: disable requireCamelCaseOrUpperCaseIdentifiers
+  course.id = getUrlParams(document.URL).course_id;
+  // jscs: enable requireCamelCaseOrUpperCaseIdentifiers
+  course.title = getCourseTitle();
+  course.menu = getCourseMenu(
+    document.querySelectorAll(BB_SELECTOR.courseMenu)
+  );
+
+  return course;
+}
+
+function getCourseMenu(menuItems) {
+  let menu = [];
+
+  for (let item of menuItems) {
+    menu.push(getMenuItem(item));
+  }
+
+  return menu;
+}
+
+function getMenuItem(item) {
+  let link = item.querySelector('a');
+  let params = getUrlParams(link.href);
+  let child = Object.assign({}, analyzeLinkType(link), getId(params));
+  child.title = link.innerText;
+
+  return child;
+}
+
+function getId(params) {
+  // jscs: disable requireCamelCaseOrUpperCaseIdentifiers
+  if (params.hasOwnProperty('content_id')) {
+    return {id: params.course_id};
+  } else {
+    // TODO: Probably want to distinguish between tools and content IDs.
+    return {id: params.tool_id};
+  }
+  // jscs: enable requireCamelCaseOrUpperCaseIdentifiers
+}
+
+function analyzeLinkType(link) {
+  let child = {};
 
   if (link) {
     if (link.origin === URL.base) {
@@ -94,9 +143,46 @@ function parseItem(item) {
     child.type = CONTENT.item.name;
   }
 
-  console.log(child);
   return child;
 }
+
+function getCourseTitle() {
+  return document.querySelector(BB_SELECTOR.courseTitle).innerText;
+}
+
+function getUrlParams(url) {
+  let urlParams = url.split('?')[1].split('&');
+  let result = {};
+
+  for (let p of urlParams) {
+    let pair = p.split('=');
+
+    result[pair[0]] = pair[1];
+  }
+
+  return result;
+}
+
+function onMessageHandler(payload, sender, sendResponse) {
+  if (!sender.tab) {
+    switch (payload.type) {
+      case ACTIONS.parseTree:
+        console.log('Requested to parse the page.');
+        sendResponse(parseCoursePage());
+        break;
+      case ACTIONS.viewCourse:
+        console.log('Requested to view course overview.');
+        showOverview();
+        break;
+      default:
+        console.log('Unknown action');
+    }
+  }
+}
+
+chrome.runtime.onMessage.addListener(onMessageHandler);
+
+/* OLD CODE */
 
 function showOverview() {
   let id = '';
@@ -117,22 +203,3 @@ function showOverview() {
     buildModal(items[id]);
   });
 }
-
-function onMessageHandler(payload, sender, sendResponse) {
-  if (!sender.tab) {
-    switch (payload.type) {
-      case ACTIONS.parseTree:
-        console.log('Requested to build the page tree.');
-        sendResponse(parsePage());
-        break;
-      case ACTIONS.viewCourse:
-        console.log('Requested to view course overview.');
-        showOverview();
-        break;
-      default:
-        console.log('Unknown action');
-    }
-  }
-}
-
-chrome.runtime.onMessage.addListener(onMessageHandler);

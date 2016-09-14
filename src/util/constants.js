@@ -1,3 +1,4 @@
+// TODO: Module and course link and tools are the same. Handle it!
 export const URL = {
   base: 'https://fiu.blackboard.com',
   contentEndPoint: '/webapps/blackboard/content/listContentEditable.jsp',
@@ -28,8 +29,10 @@ export const BB_SELECTOR = {
   contentArray: '#content_listContainer > li',
   itemTitle: '.item > h3',
   itemLink: '.item > h3 > a',
-  courseTitle: '#courseMenuPalette_paletteTitleHeading > div > h3:first-child > a',
-  rootItemTitle: '#pageTitleText'
+  courseTitle: '#courseMenuPalette_paletteTitleHeading > div > ' +
+    'h3:first-child > a',
+  contentPageTitle: '#pageTitleText',
+  courseMenu: '#courseMenuPalette_contents > li'
 };
 
 export const CONTENT = {

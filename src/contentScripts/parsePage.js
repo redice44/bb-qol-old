@@ -85,7 +85,7 @@ function getMenuItem(item) {
 function getId(params) {
   // jscs: disable requireCamelCaseOrUpperCaseIdentifiers
   if (params.hasOwnProperty('content_id')) {
-    return {id: params.course_id};
+    return {id: params.content_id};
   } else {
     // TODO: Probably want to distinguish between tools and content IDs.
     return {id: params.tool_id};

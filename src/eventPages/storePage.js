@@ -1,29 +1,46 @@
-export function storePage(courseItem) {
-  //const query = tree.courseId;
+import Node from '../util/tree-struct/node';
+
+export function storePage(course) {
   // TODO: Verify this can query into an object. eg {id: tree.courseId}
   chrome.storage.local.get(null, function(items) {
-    /*
-    if (items.hasOwnProperty(tree.courseId)) {
-      console.log('Updating course.');
-      updateCourse(items, tree);
-    } else {
-      console.log('Creating new course.');
-      addCourse(tree);
-    }
-    */
-    if (items) {
+    console.log(items);
+    console.log(course);
+
+    if (items.hasOwnProperty('data') &&
+        items.data.id === course.course.id) {
       // Course exists
+      console.log('existing course');
     } else {
-      createCourse(courseItem);
+      console.log('new course');
+      createCourse(course);
     }
   });
 }
 
 function createCourse(courseItem) {
-  let course = {};
-  course.id = courseItem.courseId;
-  course.title = courseItem.courseTitle;
-  course.menu = courseItem.courseMenu;
+  let course = new Node({
+    id: courseItem.course.id,
+    title: courseItem.course.title
+  });
+
+  course.children = courseItem.course.menu;
+  console.log('course', course);
+
+  updateContent(course, courseItem.content);
+  console.log('create update', course);
+  chrome.storage.local.set(course);
+}
+
+function updateContent(course, contentPage) {
+  let content = new Node({
+    id: contentPage.id,
+    title: contentPage.title
+  });
+  content.children = contentPage.children;
+  course.updateNode(content, (my, your) => {
+    return my.data.id === your.data.id;
+  });
+  console.log('page update', course);
 }
 
 

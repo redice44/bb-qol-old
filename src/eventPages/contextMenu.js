@@ -1,6 +1,8 @@
 import { ACTIONS, MENU_ID } from '../util/constants';
 import { menu } from '../util/menu';
 import { storePage } from './storePage';
+import Node from '../util/tree-struct/node';
+
 /* onInstalled Handler */
 function onInstalledHandler() {
   console.log('Initializing...');
@@ -61,7 +63,7 @@ function clearStorageSelection() {
 
 function viewStorageSelection() {
   chrome.storage.local.get(null, (items) => {
-    console.log(items);
+    console.log(Node.objNodetoNode(items));
   });
 }
 

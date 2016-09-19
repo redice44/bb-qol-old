@@ -2,6 +2,7 @@ require('../stylesheets/overlay.scss');
 
 import { ACTIONS, BB_SELECTOR, CONTENT, URL } from '../util/constants';
 import { buildModal } from './buildModal';
+import Node from '../util/tree-struct/node';
 
 // Parses the current page in the course.
 function parseCoursePage() {
@@ -63,23 +64,30 @@ function getCourseInfo() {
   return course;
 }
 
+// TODO: Handle separators.
+// TODO: Handle external links more gracefully
 function getCourseMenu(menuItems) {
   let menu = [];
 
   for (let item of menuItems) {
-    menu.push(getMenuItem(item));
+    let mi = getMenuItem(item);
+    if (mi) {
+      menu.push(mi);
+    }
   }
 
   return menu;
 }
 
 function getMenuItem(item) {
-  let link = item.querySelector('a');
-  let params = getUrlParams(link.href);
-  let child = Object.assign({}, analyzeLinkType(link), getId(params));
-  child.title = link.innerText;
+  let link = item.querySelector(':scope > a');
+  if (link) {
+    let params = getUrlParams(link.href);
+    let child = Object.assign({}, analyzeLinkType(link), getId(params));
+    child.title = link.innerText;
 
-  return child;
+    return child;
+  }
 }
 
 function getId(params) {
@@ -151,16 +159,39 @@ function getCourseTitle() {
 }
 
 function getUrlParams(url) {
-  let urlParams = url.split('?')[1].split('&');
   let result = {};
+  if (url.includes('?')) {
+    let urlParams = url.split('?')[1].split('&');
 
-  for (let p of urlParams) {
-    let pair = p.split('=');
+    for (let p of urlParams) {
+      let pair = p.split('=');
 
-    result[pair[0]] = pair[1];
+      result[pair[0]] = pair[1];
+    }
   }
 
   return result;
+}
+
+function showOverview() {
+  let id = '';
+  let params = document.URL.split('?')[1].split('&');
+  for (let p of params) {
+    let pair = p.split('=');
+
+    switch (pair[0]) {
+      case 'course_id':
+        id = pair[1];
+        break;
+      default:
+        // do nothing
+    }
+  }
+
+  chrome.storage.local.get(null, (items) => {
+    console.log(items);
+    console.log(Node.objNodetoNode(items));
+  });
 }
 
 function onMessageHandler(payload, sender, sendResponse) {
@@ -181,25 +212,3 @@ function onMessageHandler(payload, sender, sendResponse) {
 }
 
 chrome.runtime.onMessage.addListener(onMessageHandler);
-
-/* OLD CODE */
-
-function showOverview() {
-  let id = '';
-  let params = document.URL.split('?')[1].split('&');
-  for (let p of params) {
-    let pair = p.split('=');
-
-    switch (pair[0]) {
-      case 'course_id':
-        id = pair[1];
-        break;
-      default:
-        // do nothing
-    }
-  }
-
-  chrome.storage.local.get(id, (items) => {
-    buildModal(items[id]);
-  });
-}

@@ -90,7 +90,6 @@ class Node {
   _updateNode(me, node) {
     me._data = Object.assign({}, me._data, node.data);
     me._children = node.children;
-    console.log('updating', me, me === this);
   }
 
   /* Searches the node for the passed node.
